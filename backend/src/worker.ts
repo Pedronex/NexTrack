@@ -8,6 +8,7 @@ import { toErrorResponse } from "./lib/errors";
 import { booksRoutes } from "./routes/books";
 import type { RouteDeps } from "./routes/deps";
 import { meRoutes } from "./routes/me";
+import { spotifyRoutes } from "./routes/spotify";
 import { sessionsRoutes } from "./routes/sessions";
 
 export function buildApp(env: Env, deps?: Partial<RouteDeps>) {
@@ -26,7 +27,10 @@ export function buildApp(env: Env, deps?: Partial<RouteDeps>) {
 		.get("/health", () => ({ ok: true }))
 		.use(booksRoutes(full))
 		.use(sessionsRoutes(full))
-		.use(meRoutes({ ...full, service: () => serviceDb(env), now: () => Date.now() }));
+		.use(meRoutes({ ...full, service: () => serviceDb(env), now: () => Date.now() }))
+		.use(
+			spotifyRoutes({ ...full, service: () => serviceDb(env), now: () => Date.now() }),
+		);
 }
 
 export default {
