@@ -1,16 +1,14 @@
 "use server";
 
-import { updateTag } from "next/cache";
 import { ApiError } from "@/lib/api/client";
 import {
-  BOOKS_TAG,
   createBook,
   deleteBook,
   updateBook,
   updateProgress,
 } from "@/lib/api/books";
 import { checkNotion, disconnectSpotify } from "@/lib/api/integrations";
-import { SESSIONS_TAG, createSession } from "@/lib/api/sessions";
+import { createSession } from "@/lib/api/sessions";
 import type { Book, BookInput, ReadingSession, SessionInput, Status } from "@/lib/types";
 import { type Errors, hasErrors, validateBook, validateSession } from "@/lib/validation";
 
@@ -34,7 +32,6 @@ export async function saveBookAction(id: string | null, input: BookInput): Promi
   if (hasErrors(errors)) return invalid(errors);
   try {
     const book = id ? await updateBook(id, input) : await createBook(input);
-    updateTag(BOOKS_TAG);
     return { ok: true, data: book };
   } catch (error) {
     return failure(error);
@@ -44,7 +41,6 @@ export async function saveBookAction(id: string | null, input: BookInput): Promi
 export async function deleteBookAction(id: string): Promise<ActionResult> {
   try {
     await deleteBook(id);
-    updateTag(BOOKS_TAG);
     return { ok: true, data: null };
   } catch (error) {
     return failure(error);
@@ -61,7 +57,6 @@ export async function updateProgressAction(
   }
   try {
     const book = await updateProgress(id, currentPage, status);
-    updateTag(BOOKS_TAG);
     return { ok: true, data: book };
   } catch (error) {
     return failure(error);
@@ -76,8 +71,6 @@ export async function createSessionAction(
   if (hasErrors(errors)) return invalid(errors);
   try {
     const session = await createSession(input);
-    updateTag(SESSIONS_TAG);
-    updateTag(BOOKS_TAG);
     return { ok: true, data: session };
   } catch (error) {
     return failure(error);

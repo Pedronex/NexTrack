@@ -1,5 +1,6 @@
 import "server-only";
 import type { SpotifyDevice } from "@/lib/types";
+import { requireUser } from "@/lib/session";
 import { api } from "./client";
 
 export interface IntegrationStatus {
@@ -9,7 +10,8 @@ export interface IntegrationStatus {
 
 export async function checkNotion(): Promise<IntegrationStatus["notion"]> {
   try {
-    await api("/health/notion");
+    const { accessToken } = await requireUser();
+    await api("/health/notion", { token: accessToken });
     return { ok: true };
   } catch (error) {
     return { ok: false, error: error instanceof Error ? error.message : "Erro desconhecido" };
@@ -17,11 +19,18 @@ export async function checkNotion(): Promise<IntegrationStatus["notion"]> {
 }
 
 export async function getSpotifyStatus(): Promise<IntegrationStatus["spotify"]> {
-  const { connected } = await api<{ connected: boolean }>("/spotify/status");
+  const { accessToken } = await requireUser();
+  const { connected } = await api<{ connected: boolean }>("/spotify/status", {
+    token: accessToken,
+  });
   if (!connected) return { connected, devices: [] };
-  const result = await api<{ devices?: SpotifyDevice[] }>("/spotify/devices").catch(() => null);
+  const result = await api<{ devices?: SpotifyDevice[] }>("/spotify/devices", {
+    token: accessToken,
+  }).catch(() => null);
   return { connected, devices: result?.devices ?? [] };
 }
 
-export const disconnectSpotify = () =>
-  api<{ ok: true }>("/spotify/connection", { method: "DELETE" });
+export async function disconnectSpotify(): Promise<{ ok: true }> {
+  const { accessToken } = await requireUser();
+  return api<{ ok: true }>("/spotify/connection", { method: "DELETE", token: accessToken });
+}
