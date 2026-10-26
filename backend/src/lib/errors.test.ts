@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { parseEnv } from "../config/worker-env";
 import { ApiError, toErrorResponse } from "./errors";
 
 describe("toErrorResponse", () => {
@@ -18,8 +19,7 @@ describe("toErrorResponse", () => {
 });
 
 describe("parseEnv", () => {
-	test("falta de variáveis lança listando nomes sem valores", async () => {
-		const { parseEnv } = await import("../config/worker-env");
+	test("falta de variáveis lança listando nomes sem valores", () => {
 		let message = "";
 		try {
 			parseEnv({});

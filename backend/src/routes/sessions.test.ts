@@ -68,12 +68,12 @@ class Builder implements PromiseLike<any> {
 	}
 	insert(p: unknown) {
 		this.call.op = "insert";
-		(this.call as Record<string, unknown>).payload = p;
+		(this.call as unknown as Record<string, unknown>).payload = p;
 		return this;
 	}
 	update(p: unknown) {
 		this.call.op = "update";
-		(this.call as Record<string, unknown>).payload = p;
+		(this.call as unknown as Record<string, unknown>).payload = p;
 		return this;
 	}
 	delete() {

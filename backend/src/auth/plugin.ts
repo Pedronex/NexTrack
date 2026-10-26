@@ -25,14 +25,14 @@ export function authPlugin(
 ) {
 	const issuer = issuerFor(env);
 	return (app: Elysia) =>
-		app.derive(async ({ headers }): Promise<AuthContext> => {
+		app.derive(async ({ headers }) => {
 			const header = headers.authorization ?? headers.Authorization;
 			const value = Array.isArray(header) ? header[0] : header;
 			if (!value || !value.toLowerCase().startsWith("bearer ")) {
 				throw new ApiError(401, "unauthorized", "Sessão inválida");
 			}
 			const token = value.slice(7).trim();
-			const user = await verifyAccessToken(token, { getKey, issuer });
+			const user: AuthUser = await verifyAccessToken(token, { getKey, issuer });
 			return { user };
 		});
 }
