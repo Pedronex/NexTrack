@@ -1,15 +1,16 @@
-import { BookPlus } from "lucide-react";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { OpenBookButton } from "@/components/modals/modal-buttons";
 import { TopBar } from "@/components/layout/top-bar";
-import { StateMessage } from "@/components/ui/states";
 import { getAllBooks } from "@/lib/api/books";
+import { getSpotifyStatus } from "@/lib/api/integrations";
+import { getMe } from "@/lib/api/me";
 import { getAllSessions } from "@/lib/api/sessions";
 import { buildDashboard } from "@/lib/domain/dashboard";
+import { firstSteps, isFirstAccess } from "@/lib/domain/first-steps";
 import { formatDate, monthName, weekdayLong } from "@/lib/format";
 import { getToday } from "@/lib/today";
 import { Figures } from "@/features/dashboard/figures";
+import { FirstSteps } from "@/features/dashboard/first-steps";
 import { LibrarySummary } from "@/features/dashboard/library-summary";
 import { ReadingNow } from "@/features/dashboard/reading-now";
 import { RecentSessions } from "@/features/dashboard/recent-sessions";
@@ -28,20 +29,27 @@ export default function DashboardPage() {
 
 async function Dashboard() {
   const today = await getToday();
-  const [books, sessions] = await Promise.all([getAllBooks(), getAllSessions()]);
+  const [books, sessions, me, spotify] = await Promise.all([
+    getAllBooks(),
+    getAllSessions(),
+    getMe().catch(() => null),
+    getSpotifyStatus().catch(() => null),
+  ]);
   const topBar = (
     <TopBar eyebrow={`${weekdayLong(today)} · ${formatDate(today)}`} title={`Seu ${monthName(today)}, até aqui`} />
   );
 
-  if (books.length === 0 && sessions.length === 0) {
+  if (isFirstAccess(books.length, sessions.length)) {
     return (
       <>
         {topBar}
-        <StateMessage
-          icon={BookPlus}
-          title="Sua jornada começa aqui"
-          description="Cadastre um livro e registre a primeira sessão para ver métricas e gráficos."
-          actions={<OpenBookButton>Novo livro</OpenBookButton>}
+        <FirstSteps
+          name={me?.displayName ?? ""}
+          steps={firstSteps({
+            books: books.length,
+            sessions: sessions.length,
+            spotifyConnected: spotify?.connected ?? false,
+          })}
         />
       </>
     );
