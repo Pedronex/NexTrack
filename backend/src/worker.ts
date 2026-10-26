@@ -7,6 +7,7 @@ import { userDb } from "./db/clients";
 import { toErrorResponse } from "./lib/errors";
 import { booksRoutes } from "./routes/books";
 import type { RouteDeps } from "./routes/deps";
+import { sessionsRoutes } from "./routes/sessions";
 
 export function buildApp(env: Env, deps?: Partial<RouteDeps>) {
 	const full: RouteDeps = {
@@ -22,7 +23,8 @@ export function buildApp(env: Env, deps?: Partial<RouteDeps>) {
 			return body;
 		})
 		.get("/health", () => ({ ok: true }))
-		.use(booksRoutes(full));
+		.use(booksRoutes(full))
+		.use(sessionsRoutes(full));
 }
 
 export default {
