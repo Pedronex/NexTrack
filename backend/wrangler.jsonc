@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nextrack-api",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "SUPABASE_URL": "https://oxuzoobstcjbsavxapua.supabase.co",
+    "SUPABASE_PUBLISHABLE_KEY": "",
+    "SPOTIFY_CLIENT_ID": "",
+    "SPOTIFY_REDIRECT_URI": ""
+  }
+}
