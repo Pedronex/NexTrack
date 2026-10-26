@@ -1,10 +1,9 @@
-import { CircleCheck, Database, Laptop, Music, Smartphone, Speaker, TriangleAlert } from "lucide-react";
+import { Laptop, Music, Smartphone, Speaker } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import type { IntegrationStatus } from "@/lib/api/integrations";
-import { formatNumber, plural } from "@/lib/format";
 import type { SpotifyDevice } from "@/lib/types";
-import { DisconnectSpotifyButton, TestNotionButton } from "./integration-actions";
+import { DisconnectSpotifyButton } from "./integration-actions";
 import { ConnectSpotifyButton } from "./spotify-card";
 
 function Pill({ tone, children }: { tone: "done" | "drop" | "want"; children: ReactNode }) {
@@ -61,53 +60,16 @@ function Device({ device }: { device: SpotifyDevice }) {
 }
 
 interface IntegrationsProps {
-  status: IntegrationStatus;
-  booksCount: number;
-  sessionsCount: number;
+  spotify: IntegrationStatus["spotify"];
 }
 
-export function Integrations({ status, booksCount, sessionsCount }: IntegrationsProps) {
-  const { notion, spotify } = status;
-
+export function Integrations({ spotify }: IntegrationsProps) {
   return (
     <div className="flex flex-col gap-3.5">
       <div className="flex flex-col gap-0.5">
         <h2 className="font-display text-xl font-medium">Integrações</h2>
-        <p className="text-[13px] text-text-secondary">Os dados ficam no Notion e a API NexTrack sincroniza tudo.</p>
+        <p className="text-[13px] text-text-secondary">Conecte o Spotify para ver o que está tocando.</p>
       </div>
-
-      <section className="flex flex-col rounded border border-border bg-surface">
-        <CardHead
-          logo={
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-[5px] border border-border bg-white font-semibold text-[#111] text-2xl">
-              N
-            </span>
-          }
-          title="Notion"
-          pill={notion.ok ? <Pill tone="done">Conectado</Pill> : <Pill tone="drop">Erro de conexão</Pill>}
-          description="Fonte de dados do NexTrack. Livros e sessões são lidos e gravados nas suas bases."
-          action={<TestNotionButton />}
-        />
-        {notion.ok ? (
-          <>
-            <DatabaseRow name="Biblioteca" detail={`${formatNumber(booksCount)} ${plural(booksCount, "livro", "livros")}`} />
-            <DatabaseRow
-              name="Sessões de leitura"
-              detail={`${formatNumber(sessionsCount)} ${plural(sessionsCount, "sessão", "sessões")}`}
-            />
-          </>
-        ) : (
-          <div className="px-6 pb-5">
-            <div className="flex gap-2.5 rounded-[5px] bg-danger-soft p-3.5 text-danger" role="alert">
-              <TriangleAlert size={16} className="mt-0.5 shrink-0" />
-              <div className="flex flex-col gap-0.5">
-                <p className="text-[13px] font-semibold">Não foi possível acessar o Notion</p>
-                <p className="text-xs">{notion.error}. Verifique o token da integração e se as bases estão compartilhadas com ela.</p>
-              </div>
-            </div>
-          </div>
-        )}
-      </section>
 
       <section className="flex flex-col rounded border border-border bg-surface">
         <CardHead
@@ -164,19 +126,6 @@ export function Integrations({ status, booksCount, sessionsCount }: Integrations
           </div>
         )}
       </section>
-    </div>
-  );
-}
-
-function DatabaseRow({ name, detail }: { name: string; detail: string }) {
-  return (
-    <div className="flex items-center gap-3 border-t border-border px-6 py-3.5">
-      <Database size={16} className="text-text-tertiary" />
-      <div className="flex flex-1 flex-col gap-px">
-        <p className="text-sm font-medium">{name}</p>
-        <p className="text-xs text-text-secondary">{detail}</p>
-      </div>
-      <CircleCheck size={16} className="text-success" />
     </div>
   );
 }

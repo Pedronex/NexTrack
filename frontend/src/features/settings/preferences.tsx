@@ -1,17 +1,17 @@
 "use client";
 
 import { Monitor, Moon, Sun } from "lucide-react";
-import { type ReactNode, useSyncExternalStore } from "react";
+import { type ReactNode, useSyncExternalStore, useTransition } from "react";
+import { updateProfileAction } from "@/app/actions";
 import { Segmented } from "@/components/ui/segmented";
+import { useToast } from "@/components/ui/toast";
 
 type Theme = "light" | "dark" | "system";
 
 const THEME_KEY = "nextrack-theme";
-const GOAL_KEY = "nextrack-yearly-goal";
-const DEFAULT_GOAL = 24;
 const CHANGE_EVENT = "nextrack-preferences";
 
-// Preferências locais ao navegador, lidas como "store externa" para hidratar sem divergência.
+// Tema segue no navegador, lido como "store externa" para hidratar sem divergência.
 function subscribe(callback: () => void) {
   window.addEventListener(CHANGE_EVENT, callback);
   window.addEventListener("storage", callback);
@@ -63,9 +63,24 @@ const Row = ({ title, description, children }: { title: string; description: str
   </div>
 );
 
-export function Preferences() {
+export function Preferences({
+  yearlyGoal,
+  showMiniPlayer,
+}: {
+  yearlyGoal: number;
+  showMiniPlayer: boolean;
+}) {
+  const toast = useToast();
+  const [pending, startTransition] = useTransition();
   const theme = useStored(THEME_KEY, "system") as Theme;
-  const goal = useStored(GOAL_KEY, String(DEFAULT_GOAL));
+
+  const save = (patch: { yearlyGoal?: number; showMiniPlayer?: boolean }) =>
+    startTransition(async () => {
+      const res = await updateProfileAction(patch);
+      if (!res.ok) {
+        toast.show({ kind: "error", title: "Não foi possível salvar", description: res.message });
+      }
+    });
 
   return (
     <div className="flex flex-col rounded border border-border bg-surface">
@@ -81,18 +96,34 @@ export function Preferences() {
           ]}
         />
       </Row>
-      <Row title="Meta de leitura anual" description="Guardada neste navegador">
+      <Row title="Meta de leitura anual" description="Vale para sua conta, em todos os navegadores">
         <label className="flex h-9 w-[120px] items-center gap-1.5 rounded-[5px] border border-border-strong px-3 focus-within:border-accent">
           <input
             type="number"
             min={1}
             aria-label="Meta de leitura anual, em livros"
-            value={goal}
-            onChange={(event) => write(GOAL_KEY, event.target.value || null)}
+            defaultValue={yearlyGoal}
+            disabled={pending}
+            onBlur={(event) => {
+              const value = Number(event.target.value);
+              if (Number.isInteger(value) && value >= 1 && value !== yearlyGoal) save({ yearlyGoal: value });
+              else event.target.value = String(yearlyGoal);
+            }}
             className="min-w-0 flex-1 bg-transparent text-sm outline-none"
           />
           <span className="text-xs text-text-tertiary">livros</span>
         </label>
+      </Row>
+      <Row title="Mini player" description="Mostra o que está tocando na barra lateral">
+        <Segmented
+          label="Mini player"
+          value={showMiniPlayer ? "on" : "off"}
+          onChange={(value) => save({ showMiniPlayer: value === "on" })}
+          options={[
+            { value: "on", label: "Ligado" },
+            { value: "off", label: "Desligado" },
+          ]}
+        />
       </Row>
       <Row title="Formato de data" description="Padrão brasileiro">
         <span className="text-[13px] font-medium text-text-secondary">DD/MM/AAAA</span>

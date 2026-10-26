@@ -4,7 +4,6 @@ import { requireUser } from "@/lib/session";
 import { api } from "./client";
 
 export interface IntegrationStatus {
-  notion: { ok: boolean; error?: string };
   spotify: {
     connected: boolean;
     status: "connected" | "expired" | "disconnected";
@@ -12,16 +11,6 @@ export interface IntegrationStatus {
     product: string | null;
     devices: SpotifyDevice[];
   };
-}
-
-export async function checkNotion(): Promise<IntegrationStatus["notion"]> {
-  try {
-    const { accessToken } = await requireUser();
-    await api("/health/notion", { token: accessToken });
-    return { ok: true };
-  } catch (error) {
-    return { ok: false, error: error instanceof Error ? error.message : "Erro desconhecido" };
-  }
 }
 
 export async function getSpotifyStatus(): Promise<IntegrationStatus["spotify"]> {
