@@ -5,6 +5,7 @@ import type { IntegrationStatus } from "@/lib/api/integrations";
 import { formatNumber, plural } from "@/lib/format";
 import type { SpotifyDevice } from "@/lib/types";
 import { DisconnectSpotifyButton, TestNotionButton } from "./integration-actions";
+import { ConnectSpotifyButton } from "./spotify-card";
 
 function Pill({ tone, children }: { tone: "done" | "drop" | "want"; children: ReactNode }) {
   const classes = {
@@ -116,16 +117,33 @@ export function Integrations({ status, booksCount, sessionsCount }: Integrations
             </span>
           }
           title="Spotify"
-          pill={spotify.connected ? <Pill tone="done">Conectado</Pill> : <Pill tone="want">Desconectado</Pill>}
+          pill={
+            spotify.status === "connected" ? (
+              <Pill tone="done">Conectado</Pill>
+            ) : spotify.status === "expired" ? (
+              <Pill tone="drop">Sessão expirada</Pill>
+            ) : (
+              <Pill tone="want">Desconectado</Pill>
+            )
+          }
           description={
             spotify.connected
               ? "Mostra o que está tocando, controla a reprodução e preenche o link da música nas sessões."
-              : "Conecte para ver o que está tocando e anexar músicas às sessões."
+              : spotify.status === "expired"
+                ? "A autorização expirou. Reconecte para continuar vendo o que está tocando."
+                : "Conecte para ver o que está tocando e anexar músicas às sessões."
           }
           action={spotify.connected ? <DisconnectSpotifyButton /> : undefined}
         />
         {spotify.connected ? (
           <div className="flex flex-col gap-2.5 border-t border-border px-6 pt-4 pb-5">
+            {(spotify.name || spotify.product) && (
+              <p className="text-[13px] text-text-secondary">
+                {spotify.name}
+                {spotify.name && spotify.product ? " · " : ""}
+                {spotify.product ? `Plano ${spotify.product}` : ""}
+              </p>
+            )}
             <p className="text-[11px] font-semibold tracking-wide text-text-tertiary uppercase">Dispositivos</p>
             {spotify.devices.length === 0 ? (
               <p className="text-[13px] text-text-secondary">Nenhum dispositivo disponível. Abra o Spotify em algum aparelho.</p>
@@ -139,14 +157,9 @@ export function Integrations({ status, booksCount, sessionsCount }: Integrations
           </div>
         ) : (
           <div className="flex flex-wrap items-center gap-3 px-6 pb-6">
-            {/* Link comum: o login redireciona para fora do app. */}
-            <a
-              href="/backend/spotify/login"
-              className="flex items-center gap-2 rounded-full bg-spotify px-4 py-[9px] text-[13px] font-semibold text-white hover:opacity-90"
-            >
-              <Music size={15} />
-              Conectar com Spotify
-            </a>
+            <ConnectSpotifyButton
+              label={spotify.status === "expired" ? "Reconectar com Spotify" : "Conectar com Spotify"}
+            />
             <span className="text-xs text-text-tertiary">Você será redirecionado para autorizar o acesso.</span>
           </div>
         )}

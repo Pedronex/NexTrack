@@ -18,7 +18,7 @@ export async function Sidebar() {
         <NavLinks />
       </Suspense>
       <div className="flex-1" />
-      <MiniPlayer />
+      {me?.showMiniPlayer !== false && <MiniPlayer />}
       {me && (
         <div className="mt-2 border-t border-border pt-2">
           <UserMenu me={me} />

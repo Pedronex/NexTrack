@@ -7,9 +7,10 @@ import {
   updateBook,
   updateProgress,
 } from "@/lib/api/books";
-import { checkNotion, disconnectSpotify } from "@/lib/api/integrations";
+import { checkNotion, disconnectSpotify, getSpotifyConnectUrl } from "@/lib/api/integrations";
 import { createSession } from "@/lib/api/sessions";
 import type { Book, BookInput, ReadingSession, SessionInput, Status } from "@/lib/types";
+import { redirect } from "next/navigation";
 import { type Errors, hasErrors, validateBook, validateSession } from "@/lib/validation";
 
 export type ActionResult<T = null> =
@@ -89,4 +90,8 @@ export async function disconnectSpotifyAction(): Promise<ActionResult> {
   } catch (error) {
     return failure(error);
   }
+}
+
+export async function connectSpotifyAction(): Promise<never> {
+  redirect(await getSpotifyConnectUrl());
 }

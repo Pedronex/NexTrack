@@ -15,15 +15,16 @@ export function MiniPlayer() {
 
   if (state.status === "loading" || state.status === "error") return null;
 
-  if (state.status === "disconnected") {
+  if (state.status === "disconnected" || state.status === "expired") {
+    const expired = state.status === "expired";
     return (
       <div className={cn(shell, "pb-3")}>
         <p className="flex items-center gap-1.5 text-[11px] font-medium text-text-secondary">
-          <span className="size-[7px] rounded-full bg-text-tertiary" />
-          Spotify desconectado
+          <span className={cn("size-[7px] rounded-full", expired ? "bg-warning" : "bg-text-tertiary")} />
+          {expired ? "Sessão do Spotify expirada" : "Spotify desconectado"}
         </p>
         <Link href="/configuracoes" className="text-xs text-text-secondary underline-offset-2 hover:underline">
-          Conectar nas configurações
+          {expired ? "Reconectar nas configurações" : "Conectar nas configurações"}
         </Link>
       </div>
     );

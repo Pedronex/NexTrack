@@ -6,16 +6,30 @@ import type { SpotifyPlayback } from "./types";
 export type PlayerState =
   | { status: "loading" }
   | { status: "disconnected" }
+  | { status: "expired" }
   | { status: "idle" }
   | { status: "error" }
   | { status: "playing" | "paused"; playback: SpotifyPlayback };
 
-const BASE = "/backend/spotify";
+const BASE = "/api/spotify";
+
+/** Só consulta com a aba visível e com conta ativa (evita martelar o Worker). */
+export function shouldPoll(
+  visibility: DocumentVisibilityState,
+  status: PlayerState["status"],
+): boolean {
+  if (visibility === "hidden") return false;
+  if (status === "disconnected" || status === "expired") return false;
+  return true;
+}
 
 async function readPlayback(signal?: AbortSignal): Promise<PlayerState> {
   try {
     const res = await fetch(`${BASE}/currently-playing`, { signal, cache: "no-store" });
-    if (res.status === 401) return { status: "disconnected" };
+    if (res.status === 401) {
+      const body = (await res.json().catch(() => null)) as { code?: string } | null;
+      return { status: body?.code === "spotify_expired" ? "expired" : "disconnected" };
+    }
     if (!res.ok) return { status: "error" };
     const playback = (await res.json()) as SpotifyPlayback;
     if (!playback.item) return { status: "idle" };
@@ -25,7 +39,7 @@ async function readPlayback(signal?: AbortSignal): Promise<PlayerState> {
   }
 }
 
-/** Lê o que está tocando no Spotify; com `pollMs`, atualiza periodicamente. */
+/** Lê o que está tocando no Spotify; com `pollMs`, atualiza a cada intervalo com a aba visível. */
 export function useSpotifyPlayback(pollMs = 0) {
   const [state, setState] = useState<PlayerState>({ status: "loading" });
 
@@ -36,17 +50,28 @@ export function useSpotifyPlayback(pollMs = 0) {
     let timer: ReturnType<typeof setInterval> | undefined;
 
     const load = async () => {
+      if (document.visibilityState === "hidden") return;
       const next = await readPlayback(controller.signal);
       if (controller.signal.aborted) return;
       setState(next);
-      // Sem conta conectada não há o que acompanhar; evita requisições 401 repetidas.
-      if (next.status === "disconnected") clearInterval(timer);
     };
 
     load();
-    if (pollMs) timer = setInterval(load, pollMs);
+    if (pollMs) {
+      timer = setInterval(() => {
+        setState((current) => {
+          if (shouldPoll(document.visibilityState, current.status)) load();
+          return current;
+        });
+      }, pollMs);
+    }
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") load();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
     return () => {
       clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisibility);
       controller.abort();
     };
   }, [pollMs]);
