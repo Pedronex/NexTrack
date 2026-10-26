@@ -16,6 +16,11 @@ export function toErrorResponse(error: unknown): {
 	if (error instanceof ApiError) {
 		return { status: error.status, body: { error: error.message, code: error.code } };
 	}
+	// Erros de validação do Elysia (body/query/params) → 400 com código único.
+	const code = (error as { code?: unknown } | null)?.code;
+	if (code === "VALIDATION" || (error as { constructor?: { name?: string } })?.constructor?.name === "ValidationError") {
+		return { status: 400, body: { error: "Dados inválidos", code: "validation_error" } };
+	}
 	console.error("[worker]", error instanceof Error ? error.name : typeof error);
 	return {
 		status: 500,
