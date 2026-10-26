@@ -54,7 +54,7 @@ async function getUserWithProviders(service: SupabaseClient, userId: string) {
 
 export function meRoutes(deps: MeDeps) {
 	const auth = deps.getKey ? authPlugin(deps.env, deps.getKey) : authPlugin(deps.env);
-	return new Elysia().use(auth).get("/me", async ({ user }) => {
+	return new Elysia({ prefix: "/me" }).use(auth).get("/", async ({ user }) => {
 		const db = deps.db(user.token);
 		const { data: profile } = (await db
 			.from("profiles")
@@ -64,7 +64,7 @@ export function meRoutes(deps: MeDeps) {
 		const info = await getUserWithProviders(deps.service(), user.id);
 		return toMe(user.id, info.email ?? user.email, info.providers, profile);
 	}).patch(
-		"/me",
+		"/",
 		async ({ user, body }) => {
 			const db = deps.db(user.token);
 			const patch: Record<string, unknown> = {};
@@ -85,7 +85,7 @@ export function meRoutes(deps: MeDeps) {
 			return toMe(user.id, info.email ?? user.email, info.providers, profile);
 		},
 		{ body: patchBody },
-	).delete("/me", async ({ user, set }) => {
+	).delete("/", async ({ user, set }) => {
 		const service = deps.service();
 		const info = await getUserWithProviders(service, user.id);
 		const last = info.lastSignInAt ? Date.parse(info.lastSignInAt) : NaN;

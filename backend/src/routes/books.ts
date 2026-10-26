@@ -59,8 +59,8 @@ export function booksRoutes(deps: RouteDeps) {
 	const auth = deps.getKey
 		? authPlugin(deps.env, deps.getKey)
 		: authPlugin(deps.env);
-	return new Elysia().use(auth).get(
-		"/books",
+	return new Elysia({ prefix: "/books" }).use(auth).get(
+		"/",
 		async ({ user, query }) => {
 			const offset = query.cursor ? decodeCursor(query.cursor) : 0;
 			const limit = query.limit;
@@ -89,7 +89,7 @@ export function booksRoutes(deps: RouteDeps) {
 		},
 		{ query: listQuery },
 	).get(
-		"/books/:id",
+		"/:id",
 		async ({ user, params }) => {
 			const db = deps.db(user.token);
 			const { data, error } = (await db
@@ -107,7 +107,7 @@ export function booksRoutes(deps: RouteDeps) {
 		},
 		{ params: idParams },
 	).post(
-		"/books",
+		"/",
 		async ({ user, body, set }) => {
 			const db = deps.db(user.token);
 			const { data, error } = (await db
@@ -126,7 +126,7 @@ export function booksRoutes(deps: RouteDeps) {
 			body: createBody,
 		},
 	).patch(
-		"/books/:id",
+		"/:id",
 		async ({ user, params, body }) => {
 			const db = deps.db(user.token);
 			const { data, error } = (await db
@@ -145,7 +145,7 @@ export function booksRoutes(deps: RouteDeps) {
 		},
 		{ params: idParams, body: updateBody },
 	).patch(
-		"/books/:id/progress",
+		"/:id/progress",
 		async ({ user, params, body }) => {
 			const db = deps.db(user.token);
 			const { data, error } = (await db.rpc("update_progress", {
@@ -171,7 +171,7 @@ export function booksRoutes(deps: RouteDeps) {
 			}),
 		},
 	).delete(
-		"/books/:id",
+		"/:id",
 		async ({ user, params }) => {
 			const db = deps.db(user.token);
 			const { data, error } = (await db

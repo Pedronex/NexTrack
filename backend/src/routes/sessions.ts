@@ -30,8 +30,8 @@ const listQuery = z.object({
 
 export function sessionsRoutes(deps: RouteDeps) {
 	const auth = deps.getKey ? authPlugin(deps.env, deps.getKey) : authPlugin(deps.env);
-	return new Elysia().use(auth).get(
-		"/sessions",
+	return new Elysia({ prefix: "/sessions" }).use(auth).get(
+		"/",
 		async ({ user, query }) => {
 			const offset = query.cursor ? decodeCursor(query.cursor) : 0;
 			const limit = query.limit;
@@ -64,7 +64,7 @@ export function sessionsRoutes(deps: RouteDeps) {
 		},
 		{ query: listQuery },
 	).get(
-		"/sessions/:id",
+		"/:id",
 		async ({ user, params }) => {
 			const db = deps.db(user.token);
 			const { data, error } = (await db
@@ -82,7 +82,7 @@ export function sessionsRoutes(deps: RouteDeps) {
 		},
 		{ params: idParams },
 	).post(
-		"/sessions",
+		"/",
 		async ({ user, body, set }) => {
 			const db = deps.db(user.token);
 			if (!body.bookId) {
@@ -127,7 +127,7 @@ export function sessionsRoutes(deps: RouteDeps) {
 		},
 		{ body: createBody },
 	).patch(
-		"/sessions/:id",
+		"/:id",
 		async ({ user, params, body }) => {
 			const db = deps.db(user.token);
 			const { data, error } = (await db
@@ -146,7 +146,7 @@ export function sessionsRoutes(deps: RouteDeps) {
 		},
 		{ params: idParams, body: updateBody },
 	).delete(
-		"/sessions/:id",
+		"/:id",
 		async ({ user, params }) => {
 			const db = deps.db(user.token);
 			const { data, error } = (await db

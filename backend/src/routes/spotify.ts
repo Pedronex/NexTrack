@@ -187,11 +187,11 @@ const withDevice = (deviceId?: string) =>
 export function spotifyRoutes(deps: SpotifyDeps) {
 	const auth = deps.getKey ? authPlugin(deps.env, deps.getKey) : authPlugin(deps.env);
 	const storeFor = () => createSpotifyStore(deps.service());
-	return new Elysia().use(auth).post("/spotify/connect", async ({ user }) => {
+	return new Elysia({ prefix: "/spotify" }).use(auth).post("/connect", async ({ user }) => {
 		const { url } = await createState(deps.service(), spotifyCfg(deps.env), user.id, deps.now);
 		return { url };
 	}).post(
-		"/spotify/callback",
+		"/callback",
 		async ({ user, body }) => {
 			const verifier = await consumeState(deps.service(), body.state, user.id, deps.now);
 			const t = await requestToken(deps, {
@@ -218,7 +218,7 @@ export function spotifyRoutes(deps: SpotifyDeps) {
 		},
 		{ body: z.object({ code: z.string().min(1), state: z.string().min(1) }) },
 	).post(
-		"/spotify/connection",
+		"/connection",
 		async ({ user, body, set }) => {
 			const profile = await spotifyMe(body.accessToken, deps.spotifyFetch ?? fetch);
 			await saveConnection(
@@ -242,7 +242,7 @@ export function spotifyRoutes(deps: SpotifyDeps) {
 				expiresIn: z.number().int().min(1),
 			}),
 		},
-	).get("/spotify/status", async ({ user }) => {
+	).get("/status", async ({ user }) => {
 		const conn = await storeFor().get(user.id);
 		if (!conn) return { connected: false, status: "disconnected" as const };
 		if (conn.expired) return { connected: false, status: "expired" as const };
@@ -267,15 +267,15 @@ export function spotifyRoutes(deps: SpotifyDeps) {
 			connectedAt: data?.connected_at ?? null,
 			devices,
 		};
-	}).delete("/spotify/connection", async ({ user }) => {
+	}).delete("/connection", async ({ user }) => {
 		await deps.service().from("spotify_connections").delete().eq("user_id", user.id);
 		return { ok: true };
-	}).get("/spotify/currently-playing", async ({ user }) => {
+	}).get("/currently-playing", async ({ user }) => {
 		return (await userSpotifyFetch(deps, storeFor(), user, "/me/player/currently-playing")) ?? { active: false };
-	}).get("/spotify/devices", async ({ user }) => {
+	}).get("/devices", async ({ user }) => {
 		return userSpotifyFetch(deps, storeFor(), user, "/me/player/devices");
 	}).put(
-		"/spotify/play",
+		"/play",
 		async ({ user, body, query }) => {
 			await userSpotifyFetch(deps, storeFor(), user, `/me/player/play${withDevice(query.deviceId)}`, {
 				method: "PUT",
@@ -288,7 +288,7 @@ export function spotifyRoutes(deps: SpotifyDeps) {
 			body: z.object({ contextUri: z.string().optional(), uris: z.array(z.string()).optional() }).optional(),
 		},
 	).put(
-		"/spotify/pause",
+		"/pause",
 		async ({ user, query }) => {
 			await userSpotifyFetch(deps, storeFor(), user, `/me/player/pause${withDevice(query.deviceId)}`, {
 				method: "PUT",
@@ -297,7 +297,7 @@ export function spotifyRoutes(deps: SpotifyDeps) {
 		},
 		{ query: deviceQuery },
 	).post(
-		"/spotify/next",
+		"/next",
 		async ({ user, query }) => {
 			await userSpotifyFetch(deps, storeFor(), user, `/me/player/next${withDevice(query.deviceId)}`, {
 				method: "POST",
@@ -306,7 +306,7 @@ export function spotifyRoutes(deps: SpotifyDeps) {
 		},
 		{ query: deviceQuery },
 	).post(
-		"/spotify/previous",
+		"/previous",
 		async ({ user, query }) => {
 			await userSpotifyFetch(deps, storeFor(), user, `/me/player/previous${withDevice(query.deviceId)}`, {
 				method: "POST",
