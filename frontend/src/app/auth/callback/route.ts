@@ -14,6 +14,9 @@ export async function GET(request: NextRequest) {
     url.pathname = "/entrar";
     url.search = "";
     url.searchParams.set("erro", "provedor");
+    // Repassa o código do erro (quando vem na query) para a tela explicar o que houve.
+    const errorCode = params.get("error_code");
+    if (errorCode) url.searchParams.set("error_code", errorCode);
     return NextResponse.redirect(url);
   };
 

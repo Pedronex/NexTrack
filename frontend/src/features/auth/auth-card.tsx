@@ -23,7 +23,17 @@ export function AuthCard({
   );
 }
 
-export function AuthAlert({ message }: { message: string }) {
+export function AuthAlert({ message, tone = "error" }: { message: string; tone?: "error" | "info" }) {
+  if (tone === "info") {
+    return (
+      <p
+        role="status"
+        className="rounded-md border border-accent bg-accent-faint px-3 py-2.5 text-[13px] text-text-primary"
+      >
+        {message}
+      </p>
+    );
+  }
   return (
     <p role="alert" className="rounded-md border border-danger bg-danger-soft px-3 py-2.5 text-[13px] text-danger">
       {message}
