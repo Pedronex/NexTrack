@@ -29,7 +29,7 @@ export function UserMenu({ me }: { me: Me }) {
         />
       )}
       {open && (
-        <div className="absolute right-0 bottom-full z-20 mb-2 w-52 rounded-lg border border-border bg-surface p-1.5 shadow-lg">
+        <div className="absolute bottom-full left-0 z-20 mb-2 w-52 rounded-lg border border-border bg-surface p-1.5 shadow-lg">
           <Link
             href="/configuracoes"
             onClick={() => setOpen(false)}
@@ -59,8 +59,9 @@ export function UserMenu({ me }: { me: Me }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="menu"
+        aria-label="Menu da conta"
         className={cn(
-          "flex w-full cursor-pointer items-center gap-2.5 rounded-[5px] px-2.5 py-2 text-left transition-colors",
+          "flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-[5px] px-2.5 py-2 text-left transition-colors lg:justify-start",
           open ? "bg-surface-sunken" : "hover:bg-surface-muted",
         )}
       >
@@ -70,7 +71,7 @@ export function UserMenu({ me }: { me: Me }) {
         >
           {initialsOf(name)}
         </span>
-        <span className="min-w-0 flex-1">
+        <span className="hidden min-w-0 flex-1 lg:block">
           <span className="block truncate text-sm font-medium text-text-primary">{name}</span>
           {me.email && (
             <span className="block truncate text-xs text-text-tertiary">{me.email}</span>

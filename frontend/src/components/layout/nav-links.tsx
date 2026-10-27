@@ -34,15 +34,54 @@ export function NavList({ pathname = "" }: { pathname?: string }) {
             key={href}
             href={href}
             aria-current={active ? "page" : undefined}
+            aria-label={label}
+            title={label}
             className={cn(
-              "flex items-center gap-2.5 rounded-[5px] px-2.5 py-2 text-sm font-medium transition-colors",
+              "flex items-center justify-center gap-2.5 rounded-[5px] px-2.5 py-2 text-sm font-medium transition-colors lg:justify-start",
               active
                 ? "bg-surface-sunken text-text-primary"
                 : "text-text-secondary hover:bg-surface-muted hover:text-text-primary",
             )}
           >
             <Icon size={18} className={active ? "text-text-primary" : "text-text-secondary"} />
-            {label}
+            <span className="hidden lg:inline">{label}</span>
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
+
+const TAB_LABELS: Record<string, string> = {
+  "/": "Início",
+  "/biblioteca": "Biblioteca",
+  "/sessoes": "Sessões",
+  "/relatorios": "Relatórios",
+  "/configuracoes": "Ajustes",
+};
+
+/** Barra de abas flutuante do celular (abaixo de `md`, onde a sidebar não existe). */
+export function MobileNav() {
+  const pathname = usePathname();
+  return (
+    <nav
+      aria-label="Principal"
+      className="fixed inset-x-3 bottom-3 z-30 mx-auto flex max-w-[420px] items-center justify-between rounded-full border border-border bg-surface/95 p-1.5 shadow-lg backdrop-blur md:hidden"
+    >
+      {ITEMS.map(({ href, icon: Icon }) => {
+        const active = isActive(pathname, href);
+        return (
+          <Link
+            key={href}
+            href={href}
+            aria-current={active ? "page" : undefined}
+            className={cn(
+              "flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-full px-1 py-1.5 text-[11px] font-medium transition-colors",
+              active ? "bg-accent-soft text-text-primary" : "text-text-secondary",
+            )}
+          >
+            <Icon size={20} />
+            <span className="max-w-full truncate">{TAB_LABELS[href]}</span>
           </Link>
         );
       })}

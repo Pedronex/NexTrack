@@ -59,7 +59,7 @@ async function Dashboard() {
   return (
     <>
       {topBar}
-      <div className="flex flex-col gap-11 px-10 pt-1 pb-16">
+      <div className="flex flex-col gap-11 px-4 sm:px-6 lg:px-10 pt-1 pb-16">
         <p className="max-w-[760px] font-display text-[23px] leading-snug text-text-secondary">{data.lede}</p>
         <Figures data={data} />
         <div className="flex flex-col gap-14 xl:flex-row">

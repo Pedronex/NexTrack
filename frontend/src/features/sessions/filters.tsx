@@ -21,7 +21,7 @@ function Select({ label, value, options, onChange }: { label: string; value: str
   return (
     <label className="relative flex h-9 cursor-pointer items-center gap-1.5 rounded-[5px] border border-border-strong bg-surface pr-2.5 pl-3 text-[13px] focus-within:border-accent">
       <span className="text-text-secondary">{label}:</span>
-      <span className="max-w-[200px] truncate font-medium">{current}</span>
+      <span className="max-w-[140px] truncate sm:max-w-[200px] font-medium">{current}</span>
       <ChevronDown size={14} className="text-text-tertiary" />
       <select
         aria-label={label}
@@ -47,7 +47,7 @@ export function SessionsFilters({ params, currentMonth, books, months }: Session
     <div className="flex flex-wrap items-center gap-2.5">
       <form
         role="search"
-        className="flex h-9 w-[280px] items-center gap-2 rounded-[5px] border border-border-strong bg-surface px-2.5 focus-within:border-accent"
+        className="flex h-9 w-full items-center sm:w-[280px] gap-2 rounded-[5px] border border-border-strong bg-surface px-2.5 focus-within:border-accent"
         onSubmit={(event) => {
           event.preventDefault();
           go({ q: String(new FormData(event.currentTarget).get("q") ?? "").trim() || undefined });

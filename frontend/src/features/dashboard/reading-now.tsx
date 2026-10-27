@@ -19,7 +19,7 @@ const byline = (book: Book) =>
 function Featured({ book, lastNote }: { book: Book; lastNote: DashboardData["lastNote"] }) {
   const percent = progressPercent(book);
   return (
-    <div className="flex gap-7">
+    <div className="flex flex-col gap-5 sm:flex-row sm:gap-7">
       <BookCover title={book.title} size="lg" />
       <div className="flex min-w-0 flex-1 flex-col gap-3.5">
         <div className="flex flex-col gap-1">
@@ -68,7 +68,7 @@ function OtherRow({ book }: { book: Book }) {
         </p>
       </div>
       {book.totalPages && (
-        <div className="flex w-[120px] flex-col items-end gap-1.5">
+        <div className="hidden w-[120px] flex-col items-end gap-1.5 sm:flex">
           <span className="text-xs text-text-secondary">
             pág. {book.currentPage ?? 0} de {book.totalPages}
           </span>

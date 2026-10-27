@@ -14,7 +14,62 @@ interface SessionsTableProps {
 
 export function SessionsTable({ groups, bookById }: SessionsTableProps) {
   return (
-    <div className="relative overflow-x-auto rounded border border-border bg-surface">
+    <>
+      <div className="flex flex-col gap-6 md:hidden">
+        {groups.map((group) => (
+          <section key={group.key} className="flex flex-col gap-2.5">
+            <h3>
+              <span className="mr-2 font-display text-base font-medium">{group.title}</span>
+              <span className="text-xs font-normal text-text-tertiary">
+                {group.sessions.length} {plural(group.sessions.length, "sessão", "sessões")} · {group.pages} págs
+              </span>
+            </h3>
+            <ul className="flex flex-col gap-2.5">
+              {group.sessions.map((session) => {
+                const day = dayOf(session)!;
+                const book = session.bookId ? bookById.get(session.bookId) : undefined;
+                const pages = pagesOf(session);
+                const rhythm = pace(pages, session.durationMin ?? 0);
+                return (
+                  <li key={session.id} className="flex flex-col gap-2 rounded border border-border bg-surface p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium">{session.title}</p>
+                        <p className="text-[11px] text-text-tertiary">
+                          {formatDate(day)} · {weekdayShort(day)}
+                        </p>
+                      </div>
+                      <span className="text-sm font-semibold">+{pages}</span>
+                    </div>
+                    {book && (
+                      <Link href={`/biblioteca/${book.id}`} className="flex items-center gap-2.5 text-[13px] text-text-secondary">
+                        <BookCover title={book.title} size="xs" />
+                        <span className="truncate">{book.title}</span>
+                      </Link>
+                    )}
+                    {session.notes && <p className="text-xs text-text-secondary">“{session.notes}”</p>}
+                    <div className="flex items-center gap-3 text-xs text-text-secondary">
+                      {session.startPage != null && session.endPage != null && (
+                        <span>
+                          {session.startPage} → {session.endPage}
+                        </span>
+                      )}
+                      {session.durationMin ? <span>{session.durationMin} min</span> : null}
+                      {rhythm ? <span>{rhythm} p/h</span> : null}
+                      {session.spotifyUrl && (
+                        <a href={session.spotifyUrl} target="_blank" rel="noreferrer" aria-label="Abrir música no Spotify" className="ml-auto">
+                          <Music size={14} className="text-spotify" />
+                        </a>
+                      )}
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        ))}
+      </div>
+      <div className="relative hidden overflow-x-auto rounded border border-border bg-surface md:block">
       <table className="w-full min-w-[960px] text-left">
         <thead className="bg-surface-muted">
           <tr className="border-b border-border text-[11px] font-semibold tracking-wide text-text-tertiary uppercase">
@@ -88,6 +143,7 @@ export function SessionsTable({ groups, bookById }: SessionsTableProps) {
           </tbody>
         ))}
       </table>
-    </div>
+      </div>
+    </>
   );
 }

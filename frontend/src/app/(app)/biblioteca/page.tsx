@@ -56,7 +56,7 @@ async function Library({ searchParams }: Pick<PageProps<"/biblioteca">, "searchP
   return (
     <>
       {topBar}
-      <div className="flex flex-col gap-8 px-10 pt-2 pb-14">
+      <div className="flex flex-col gap-8 px-4 sm:px-6 lg:px-10 pt-2 pb-14">
         <div className="flex flex-col gap-4">
           <StatusTabs params={current} total={books.length} counts={countByStatus(books)} />
           <LibraryFilters params={current} shown={visible.length} total={matches.length} />

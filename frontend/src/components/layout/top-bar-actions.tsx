@@ -10,10 +10,10 @@ export function TopBarActions() {
   const modals = useModals();
 
   return (
-    <div className="flex items-center gap-2.5">
+    <div className="flex w-full flex-wrap items-center gap-2.5 sm:w-auto">
       <form
         role="search"
-        className="flex h-9 w-[220px] items-center gap-2 rounded-md border border-border bg-surface px-2.5 focus-within:border-accent"
+        className="flex h-9 w-full items-center sm:w-[220px] gap-2 rounded-md border border-border bg-surface px-2.5 focus-within:border-accent"
         onSubmit={(event) => {
           event.preventDefault();
           const query = String(new FormData(event.currentTarget).get("q") ?? "").trim();

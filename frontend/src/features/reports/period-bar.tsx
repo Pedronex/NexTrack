@@ -42,11 +42,11 @@ export function PeriodBar({ params, period, today, previousLabel, exportRows }: 
       {params.kind === "personalizado" ? (
         <CustomRange from={params.from} to={params.to} />
       ) : (
-        <div className="flex items-center gap-1 pl-2">
+        <div className="flex flex-wrap items-center gap-1 pl-2">
           <Link href={href({ ref: period.prevRef ?? params.ref })} aria-label="Período anterior" className={navButton}>
             <ChevronLeft size={15} />
           </Link>
-          <p className="flex items-center gap-2 px-2.5">
+          <p className="flex flex-wrap items-center gap-2 px-2.5">
             <Calendar size={15} className="text-text-tertiary" />
             <span className="text-sm font-semibold">{period.label}</span>
             <span className="text-[13px] text-text-tertiary">{period.range}</span>

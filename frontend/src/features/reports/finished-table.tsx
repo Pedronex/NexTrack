@@ -15,7 +15,31 @@ export function FinishedTable({ rows, subtitle }: { rows: FinishedRow[]; subtitl
       {rows.length === 0 ? (
         <p className="text-sm text-text-secondary">Nenhum livro foi concluído neste período.</p>
       ) : (
-        <div className="relative overflow-x-auto rounded border border-border bg-surface">
+        <>
+        <ul className="flex flex-col gap-3 md:hidden">
+          {rows.map(({ book, start, end, days, sessions, rhythm }) => (
+            <li key={book.id} className="flex flex-col gap-2.5 rounded border border-border bg-surface p-4">
+              <Link href={`/biblioteca/${book.id}`} className="flex items-center gap-3">
+                <BookCover title={book.title} size="md" />
+                <span className="flex min-w-0 flex-col gap-0.5">
+                  <span className="truncate text-sm font-medium">{book.title}</span>
+                  <span className="truncate text-xs text-text-secondary">{book.author}</span>
+                </span>
+              </Link>
+              <p className="text-[13px] text-text-secondary">
+                {start ? `${formatDayMonth(start)} → ${formatDate(end)}` : formatDate(end)}
+                {days != null && ` · ${days} ${plural(days, "dia", "dias")}`} · {sessions} {plural(sessions, "sessão", "sessões")}
+              </p>
+              <div className="flex items-center justify-between text-[13px] text-text-secondary">
+                <span>
+                  {[book.format && FORMAT_LABEL[book.format], rhythm && `${rhythm} págs/h`].filter(Boolean).join(" · ") || "—"}
+                </span>
+                <Rating value={book.rating} />
+              </div>
+            </li>
+          ))}
+        </ul>
+        <div className="relative hidden overflow-x-auto rounded border border-border bg-surface md:block">
           <table className="w-full min-w-[820px] text-left">
             <thead className="bg-surface-muted">
               <tr className="border-b border-border text-[11px] font-semibold tracking-wide text-text-tertiary uppercase">
@@ -55,6 +79,7 @@ export function FinishedTable({ rows, subtitle }: { rows: FinishedRow[]; subtitl
             </tbody>
           </table>
         </div>
+        </>
       )}
     </section>
   );

@@ -28,7 +28,7 @@ export default function ReportsPage({ searchParams }: PageProps<"/relatorios">) 
       fallback={
         <>
           <TopBar eyebrow="Análise por período" title="Relatórios" />
-          <div className="flex flex-col gap-7 px-10 pt-2 pb-14" aria-busy>
+          <div className="flex flex-col gap-7 px-4 sm:px-6 lg:px-10 pt-2 pb-14" aria-busy>
             <Skeleton className="h-9 max-w-xl" />
             <Skeleton className="h-[110px]" />
             <Skeleton className="h-[360px]" />
@@ -61,7 +61,7 @@ async function Reports({ searchParams }: Pick<PageProps<"/relatorios">, "searchP
   return (
     <>
       <TopBar eyebrow="Análise por período" title="Relatórios" />
-      <div className="flex flex-col gap-7 px-10 pt-2 pb-14">
+      <div className="flex flex-col gap-7 px-4 sm:px-6 lg:px-10 pt-2 pb-14">
         <PeriodBar
           params={params}
           period={period}

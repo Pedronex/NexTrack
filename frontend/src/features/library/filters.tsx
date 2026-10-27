@@ -52,7 +52,7 @@ export function LibraryFilters({ params, shown, total }: LibraryFiltersProps) {
     <div className="flex flex-wrap items-center gap-2.5">
       <form
         role="search"
-        className="flex h-9 w-80 items-center gap-2 rounded-[5px] border border-border-strong bg-surface px-2.5 focus-within:border-accent"
+        className="flex h-9 w-full items-center sm:w-80 gap-2 rounded-[5px] border border-border-strong bg-surface px-2.5 focus-within:border-accent"
         onSubmit={(event) => {
           event.preventDefault();
           go({ q: String(new FormData(event.currentTarget).get("q") ?? "").trim() || undefined });
