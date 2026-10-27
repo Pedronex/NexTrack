@@ -14,7 +14,45 @@ const Dash = () => <span className="text-text-tertiary">—</span>;
 
 export function BookTable({ books }: { books: Book[] }) {
   return (
-    <div className="relative overflow-x-auto rounded border border-border bg-surface">
+    <>
+      <ul className="flex flex-col gap-3 md:hidden">
+        {books.map((book) => {
+          const percent = progressPercent(book);
+          return (
+            <li key={book.id} className="flex flex-col gap-3 rounded border border-border bg-surface p-4">
+              <div className="flex items-start gap-3">
+                <Link href={`/biblioteca/${book.id}`} className="flex min-w-0 flex-1 items-center gap-3">
+                  <BookCover title={book.title} size="sm" />
+                  <span className="flex min-w-0 flex-col gap-px">
+                    <span className="truncate text-sm font-medium">{book.title}</span>
+                    <span className="truncate text-xs text-text-secondary">{book.author}</span>
+                  </span>
+                </Link>
+                <BookMenu book={book} />
+              </div>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                <StatusBadge status={book.status} />
+                {book.format && <span className="text-[13px] text-text-secondary">{FORMAT_LABEL[book.format]}</span>}
+                <span className="ml-auto">
+                  <Rating value={book.rating} />
+                </span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <ProgressBar value={percent} tone={toneOf(book.status)} className="flex-1" />
+                <span className="text-xs text-text-secondary">{percent}%</span>
+              </div>
+              {(book.startedAt || book.finishedAt) && (
+                <p className="text-xs text-text-tertiary">
+                  {book.startedAt && `Início ${formatDate(book.startedAt)}`}
+                  {book.startedAt && book.finishedAt && " · "}
+                  {book.finishedAt && `Conclusão ${formatDate(book.finishedAt)}`}
+                </p>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+      <div className="relative hidden overflow-x-auto rounded border border-border bg-surface md:block">
       <table className="w-full min-w-[960px] text-left">
         <thead className="bg-surface-muted">
           <tr className="border-b border-border text-[11px] font-semibold tracking-wide text-text-tertiary uppercase">
@@ -71,6 +109,7 @@ export function BookTable({ books }: { books: Book[] }) {
           })}
         </tbody>
       </table>
-    </div>
+      </div>
+    </>
   );
 }

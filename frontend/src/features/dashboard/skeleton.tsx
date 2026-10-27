@@ -5,7 +5,7 @@ export function DashboardSkeleton() {
   return (
     <>
       <TopBar eyebrow="Carregando…" title="Seu mês, até aqui" />
-      <div className="flex flex-col gap-11 px-10 pt-1 pb-16" aria-busy>
+      <div className="flex flex-col gap-11 px-4 sm:px-6 lg:px-10 pt-1 pb-16" aria-busy>
         <Skeleton className="h-16 max-w-[760px]" />
         <Skeleton className="h-[120px]" />
         <div className="flex gap-14">

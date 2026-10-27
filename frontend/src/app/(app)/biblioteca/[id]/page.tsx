@@ -20,7 +20,7 @@ export default function BookPage({ params }: PageProps<"/biblioteca/[id]">) {
       fallback={
         <>
           <TopBar eyebrow="Biblioteca" title="Detalhe do livro" />
-          <div className="flex flex-col gap-10 px-10 pt-2 pb-14" aria-busy>
+          <div className="flex flex-col gap-10 px-4 sm:px-6 lg:px-10 pt-2 pb-14" aria-busy>
             <Skeleton className="h-[290px]" />
             <Skeleton className="h-[260px]" />
           </div>
@@ -42,7 +42,7 @@ async function BookDetail({ params }: Pick<PageProps<"/biblioteca/[id]">, "param
   return (
     <>
       <TopBar eyebrow={`Biblioteca  ›  ${book.title}`} title="Detalhe do livro" />
-      <div className="flex flex-col gap-10 px-10 pt-2 pb-14">
+      <div className="flex flex-col gap-10 px-4 sm:px-6 lg:px-10 pt-2 pb-14">
         <div className="flex flex-col gap-6 xl:flex-row">
           <BookHeader book={book} stats={stats} />
           <QuickUpdate key={`${book.currentPage}-${book.status}`} book={book} />

@@ -24,7 +24,7 @@ const STEP_META: Record<FirstStep["id"], { title: string; description: string; i
 /** Tela "Bem-vindo" com o checklist de primeiro acesso (frame Dashboard — primeiro acesso). */
 export function FirstSteps({ name, steps }: { name: string; steps: FirstStep[] }) {
   return (
-    <div className="flex flex-col gap-8 px-10 pt-1 pb-16">
+    <div className="flex flex-col gap-8 px-4 sm:px-6 lg:px-10 pt-1 pb-16">
       <p className="max-w-[760px] font-display text-[23px] leading-snug text-text-secondary">
         Bem-vindo{ name ? `, ${name}` : ""}! Complete os passos abaixo para começar.
       </p>

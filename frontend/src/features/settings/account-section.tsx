@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { signOutAction } from "@/app/(auth)/actions";
 import { updateProfileAction } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { TextInput } from "@/components/ui/field";
@@ -10,6 +11,7 @@ import type { Me } from "@/lib/api/me";
 export function AccountSection({ me }: { me: Me }) {
   const toast = useToast();
   const [pending, startTransition] = useTransition();
+  const [signingOut, startSignOut] = useTransition();
   const [name, setName] = useState(me.displayName);
 
   const save = () =>
@@ -52,6 +54,12 @@ export function AccountSection({ me }: { me: Me }) {
               {me.email ? " · verificado" : ""}
             </p>
           </div>
+        </div>
+        <div className="flex items-center gap-3 border-t border-border px-6 py-4 md:hidden">
+          <p className="flex-1 text-sm font-medium">Sessão</p>
+          <Button variant="secondary" size="sm" disabled={signingOut} onClick={() => startSignOut(() => signOutAction())}>
+            {signingOut ? "Saindo…" : "Sair"}
+          </Button>
         </div>
       </div>
     </section>

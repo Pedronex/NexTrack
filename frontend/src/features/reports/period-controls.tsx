@@ -23,7 +23,7 @@ export function CustomRange({ from, to }: { from: string; to: string }) {
   const router = useRouter();
   return (
     <form
-      className="flex items-center gap-2 pl-2 text-[13px]"
+      className="flex flex-wrap items-center gap-2 pl-2 text-[13px]"
       onSubmit={(event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);

@@ -23,7 +23,7 @@ export default function SessionsPage({ searchParams }: PageProps<"/sessoes">) {
       fallback={
         <>
           <TopBar eyebrow="Carregando…" title="Sessões" />
-          <div className="flex flex-col gap-8 px-10 pt-2 pb-14" aria-busy>
+          <div className="flex flex-col gap-8 px-4 sm:px-6 lg:px-10 pt-2 pb-14" aria-busy>
             <Skeleton className="h-9 max-w-xl" />
             <Skeleton className="h-[420px]" />
           </div>
@@ -89,7 +89,7 @@ async function Sessions({ searchParams }: Pick<PageProps<"/sessoes">, "searchPar
   return (
     <>
       {topBar}
-      <div className="flex flex-col gap-8 px-10 pt-2 pb-14">
+      <div className="flex flex-col gap-8 px-4 sm:px-6 lg:px-10 pt-2 pb-14">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <SessionsFilters
             params={params}

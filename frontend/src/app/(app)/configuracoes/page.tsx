@@ -17,7 +17,7 @@ export default function SettingsPage() {
   return (
     <>
       <TopBar eyebrow="Conta, integrações e preferências" title="Configurações" />
-      <div className="flex max-w-[840px] flex-col gap-8 px-10 pt-2 pb-14">
+      <div className="flex max-w-[840px] flex-col gap-8 px-4 sm:px-6 lg:px-10 pt-2 pb-14">
         <Suspense fallback={<Skeleton className="h-[300px]" />}>
           <SettingsSections />
         </Suspense>
