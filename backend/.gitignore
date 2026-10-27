@@ -43,3 +43,6 @@ package-lock.json
 **/*.bun
 # dados locais (tokens do Spotify)
 /data
+# Cloudflare
+.dev.vars
+.wrangler/

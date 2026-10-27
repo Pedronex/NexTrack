@@ -5,8 +5,8 @@ Sem valores secretos: chaves e senhas vivem nos dashboards (Supabase, Cloudflare
 ## 1. Supabase (projeto `oxuzoobstcjbsavxapua`)
 
 - SQL: migrações em `supabase/migrations/` aplicadas em ordem (`schema` → `progress_functions` → `hardening`).
-- Auth → URL Configuration: Site URL `https://app.<domínio>`; Redirect URLs com
-  `https://app.<domínio>/auth/callback` e `http://localhost:3001/auth/callback` (dev).
+- Auth → URL Configuration: Site URL `https://track.nexsdev.com.br`; Redirect URLs com
+  `https://track.nexsdev.com.br/auth/callback` e `http://localhost:3001/auth/callback` (dev).
 - Auth → Providers: Google e Spotify habilitados.
   - Spotify: escopos `user-read-playback-state user-modify-playback-state user-read-currently-playing user-read-private user-read-email`;
     Redirect URL do Spotify `https://oxuzoobstcjbsavxapua.supabase.co/auth/v1/callback`.
@@ -18,7 +18,7 @@ Sem valores secretos: chaves e senhas vivem nos dashboards (Supabase, Cloudflare
 
 Redirect URIs:
 - `https://oxuzoobstcjbsavxapua.supabase.co/auth/v1/callback` (login com Spotify)
-- `https://app.<domínio>/spotify/retorno` (botão "Conectar Spotify")
+- `https://track.nexsdev.com.br/spotify/retorno` (botão "Conectar Spotify")
 
 Modo de desenvolvimento limita usuários liberados: pedir ampliação de cota antes de abrir o cadastro.
 
@@ -26,7 +26,7 @@ Modo de desenvolvimento limita usuários liberados: pedir ampliação de cota an
 
 Cliente OAuth com a Redirect URL do Supabase (`.../auth/v1/callback`).
 
-## 4. Cloudflare Worker (`api.<domínio>`)
+## 4. Cloudflare Worker (`api.track.nexsdev.com.br`)
 
 ```sh
 cd backend
@@ -37,14 +37,14 @@ bunx wrangler deploy
 ```
 
 Variáveis públicas em `wrangler.jsonc`: `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`,
-`SPOTIFY_CLIENT_ID`, `SPOTIFY_REDIRECT_URI=https://app.<domínio>/spotify/retorno`.
+`SPOTIFY_CLIENT_ID`, `SPOTIFY_REDIRECT_URI=https://track.nexsdev.com.br/spotify/retorno`.
 Regras de limite de requisições no painel do Cloudflare.
 
-## 5. Frontend (Vercel, `app.<domínio>`)
+## 5. Frontend (Vercel, `track.nexsdev.com.br`)
 
 Variáveis: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`,
-`API_URL=https://api.<domínio>`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`,
-`NEXT_PUBLIC_APP_URL=https://app.<domínio>`.
+`API_URL=https://api.track.nexsdev.com.br`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`,
+`NEXT_PUBLIC_APP_URL=https://track.nexsdev.com.br`.
 Atualizar o Next para a versão com a vulnerabilidade corrigida antes do deploy
 (o build avisa; ver recomendação de upgrade).
 

@@ -3,11 +3,19 @@
   "name": "nextrack-api",
   "main": "src/worker.ts",
   "compatibility_date": "2026-10-01",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "routes": [
+    {
+      "pattern": "api.track.nexsdev.com.br",
+      "custom_domain": true
+    }
+  ],
   "vars": {
     "SUPABASE_URL": "https://oxuzoobstcjbsavxapua.supabase.co",
-    "SUPABASE_PUBLISHABLE_KEY": "",
-    "SPOTIFY_CLIENT_ID": "",
-    "SPOTIFY_REDIRECT_URI": ""
+    "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_n7G1VvbcmxhC9J0nKWK5wQ_1kA8OIVp",
+    "SPOTIFY_CLIENT_ID": "89578645968f4205a9b1827c266381cf",
+    "SPOTIFY_REDIRECT_URI": "https://track.nexsdev.com.br/spotify/retorno"
   }
 }
