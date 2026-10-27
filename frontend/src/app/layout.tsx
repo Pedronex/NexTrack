@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Instrument_Sans, Newsreader } from "next/font/google";
 import { Suspense } from "react";
 import { ToastProvider } from "@/components/ui/toast";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
 const newsreader = Newsreader({
@@ -16,8 +17,28 @@ const instrumentSans = Instrument_Sans({
 });
 
 export const metadata: Metadata = {
-  title: { default: "NexTrack", template: "%s · NexTrack" },
-  description: "Acompanhe suas leituras, sessões e progresso.",
+  metadataBase: SITE_URL,
+  title: { default: SITE_NAME, template: `%s · ${SITE_NAME}` },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  keywords: ["leitura", "livros", "rastreador de leituras", "meta de leitura", "sessões de leitura", "Spotify"],
+  formatDetection: { telephone: false, email: false, address: false },
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: { card: "summary_large_image", title: SITE_NAME, description: SITE_DESCRIPTION },
+};
+
+// Barra do navegador no celular acompanha o fundo do tema.
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f5f2eb" },
+    { media: "(prefers-color-scheme: dark)", color: "#121210" },
+  ],
 };
 
 // Aplica o tema salvo antes da primeira pintura (evita flash). "sistema" = sem atributo.

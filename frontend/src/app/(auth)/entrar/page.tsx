@@ -3,8 +3,13 @@ import { AuthCard, AuthLink, AuthLinks } from "@/features/auth/auth-card";
 import { AuthNotice } from "@/features/auth/auth-notice";
 import { SignInForm } from "@/features/auth/signin-form";
 import { DividerOu, SocialButtons } from "@/features/auth/social-buttons";
+import { publicPage } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Entrar" };
+export const metadata: Metadata = publicPage({
+  title: "Entrar",
+  description: "Entre no NexTrack e acompanhe suas leituras, sessões e metas de onde parou.",
+  path: "/entrar",
+});
 
 export default async function SignInPage({
   searchParams,

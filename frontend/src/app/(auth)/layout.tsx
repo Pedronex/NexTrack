@@ -1,8 +1,5 @@
-import type { Metadata } from "next";
-
-export const metadata: Metadata = { title: "NexTrack" };
-
 // Grupo de autenticação: layout sem sidebar, centralizado e responsivo.
+// Sem `title` aqui: um título fixo no layout anularia o template "%s · NexTrack" das páginas.
 export default function AuthLayout({ children }: LayoutProps<"/">) {
   return (
     <div className="flex min-h-dvh items-center justify-center px-4 py-10">

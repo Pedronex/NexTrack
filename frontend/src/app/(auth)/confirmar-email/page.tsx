@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { AuthCard, AuthLink, AuthLinks } from "@/features/auth/auth-card";
+import { NO_INDEX } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Confirmar e-mail" };
+export const metadata: Metadata = { title: "Confirmar e-mail", robots: NO_INDEX };
 
 export default function ConfirmEmailPage() {
   return (

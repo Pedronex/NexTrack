@@ -53,5 +53,9 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
+  // Arquivos de metadados (robots, sitemap, manifest, imagens geradas) ficam fora: buscadores
+  // e navegadores os pedem sem sessão e não podem ser redirecionados para /entrar.
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|manifest.webmanifest|opengraph-image|apple-icon|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
 };
