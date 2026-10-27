@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { LogoMark } from "@/components/ui/logo-mark";
 import { cn } from "@/lib/cn";
 
 export function AuthCard({
@@ -14,7 +15,10 @@ export function AuthCard({
 }) {
   return (
     <div className="rounded-xl border border-border bg-surface p-6 shadow-sm sm:p-8">
-      <p className="font-display text-2xl text-text-primary">NexTrack</p>
+      <p className="flex items-center gap-2 font-display text-2xl text-text-primary">
+        <LogoMark />
+        NexTrack
+      </p>
       <p className="mt-4 text-xs font-medium tracking-wide text-text-tertiary uppercase">{eyebrow}</p>
       <h1 className="mt-1 font-display text-[26px] leading-tight text-text-primary">{title}</h1>
       {description && <p className="mt-2 text-sm leading-relaxed text-text-secondary">{description}</p>}

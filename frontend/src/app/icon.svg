@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Favicon: tile em tinta funciona em abas claras e escuras. -->
+  <rect width="32" height="32" rx="8" fill="#1f1e1b"/>
+  <path fill="#fbfaf7" stroke="#fbfaf7" stroke-width="1.5" stroke-linejoin="round" d="M11.5 6h9a1.5 1.5 0 0 1 1.5 1.5V26l-6-4.4-6 4.4V7.5A1.5 1.5 0 0 1 11.5 6Z"/>
+  <circle cx="16" cy="12" r="3" fill="#3e63dd"/>
+</svg>
