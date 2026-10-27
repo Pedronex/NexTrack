@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 148 32" role="img" aria-label="NexTrack">
+  <style>
+    .ink { fill: #1f1e1b; stroke: #1f1e1b; }
+    .txt { fill: #1c1b18; font-family: Newsreader, Georgia, serif; font-size: 23px; letter-spacing: -0.2px; }
+    .acc { fill: #3e63dd; }
+    @media (prefers-color-scheme: dark) {
+      .ink { fill: #edeae3; stroke: #edeae3; }
+      .txt { fill: #edeae3; }
+      .acc { fill: #7c9bf5; }
+    }
+  </style>
+  <path class="ink" stroke-width="2" stroke-linejoin="round" d="M10 4h12a2 2 0 0 1 2 2v21l-8-5.5L8 27V6a2 2 0 0 1 2-2Z"/>
+  <circle class="acc" cx="16" cy="11" r="3"/>
+  <text class="txt" x="34" y="23.5">NexTrack</text>
+</svg>

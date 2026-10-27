@@ -66,7 +66,7 @@ export function MobileNav() {
   return (
     <nav
       aria-label="Principal"
-      className="fixed inset-x-3 bottom-3 z-30 mx-auto flex max-w-[420px] items-center justify-between rounded-full border border-border bg-surface/95 p-1.5 shadow-lg backdrop-blur md:hidden"
+      className="fixed inset-x-3 bottom-3 z-30 mx-auto flex max-w-[420px] items-center justify-between glass rounded-full p-1.5 md:hidden"
     >
       {ITEMS.map(({ href, icon: Icon }) => {
         const active = isActive(pathname, href);
@@ -77,7 +77,7 @@ export function MobileNav() {
             aria-current={active ? "page" : undefined}
             className={cn(
               "flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-full px-1 py-1.5 text-[11px] font-medium transition-colors",
-              active ? "bg-accent-soft text-text-primary" : "text-text-secondary",
+              active ? "bg-(--glass-active) text-text-primary shadow-sm" : "text-text-secondary",
             )}
           >
             <Icon size={20} />

@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { MiniPlayer } from "./mini-player";
 import { NavLinks, NavList } from "./nav-links";
 import { UserMenu } from "./user-menu";
+import { LogoMark } from "@/components/ui/logo-mark";
 import { getMe } from "@/lib/api/me";
 
 export async function Sidebar() {
@@ -14,9 +15,9 @@ export async function Sidebar() {
       <Link
         href="/"
         aria-label="NexTrack"
-        className="px-2.5 pb-7 text-center font-display text-2xl tracking-[-0.2px] text-text-primary lg:text-left"
+        className="flex items-center justify-center gap-2 px-2.5 pb-7 font-display text-2xl tracking-[-0.2px] text-text-primary lg:justify-start"
       >
-        <span className="lg:hidden">N</span>
+        <LogoMark />
         <span className="hidden lg:inline">NexTrack</span>
       </Link>
       <Suspense fallback={<NavList />}>

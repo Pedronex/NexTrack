@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="NexTrack">
+  <style>
+    .ink { fill: #1f1e1b; stroke: #1f1e1b; }
+    .acc { fill: #3e63dd; }
+    @media (prefers-color-scheme: dark) {
+      .ink { fill: #edeae3; stroke: #edeae3; }
+      .acc { fill: #7c9bf5; }
+    }
+  </style>
+  <!-- Marcador de página: guarda onde você parou. -->
+  <path class="ink" stroke-width="2" stroke-linejoin="round" d="M10 4h12a2 2 0 0 1 2 2v21l-8-5.5L8 27V6a2 2 0 0 1 2-2Z"/>
+  <!-- Ponto "lendo agora" (mesmo tom do status "lendo"). -->
+  <circle class="acc" cx="16" cy="11" r="3"/>
+</svg>
