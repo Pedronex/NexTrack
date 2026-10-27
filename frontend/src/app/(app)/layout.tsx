@@ -1,8 +1,13 @@
+import type { Metadata } from "next";
 import { connection } from "next/server";
 import { ModalProvider } from "@/components/modals/modal-provider";
 import { MobileNav } from "@/components/layout/nav-links";
 import { Sidebar } from "@/components/layout/sidebar";
 import { getAllBooks } from "@/lib/api/books";
+import { NO_INDEX } from "@/lib/seo";
+
+// Área logada: nada aqui entra no índice dos buscadores.
+export const metadata: Metadata = { robots: NO_INDEX };
 
 export default async function AppLayout({ children }: LayoutProps<"/">) {
   // Rotas autenticadas: resolve em tempo de requisição (nunca pré-renderiza sem sessão).
